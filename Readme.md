@@ -28,6 +28,12 @@ git tms export --append 0abcdef..HEAD results.sqlite3
 # Show results & coverage & output for a sha on windows
 git tms results --coverage --raw --os windows HEAD
 
+# Find unreliable tests (where a pass and fail exist on the same SHA/environment)
+git tms scan --unreliable 0abcdef..HEAD
+
+# Record the results of a manual test, optionally tagging covered code (or if it does not exist, more nebulous things like concepts)
+git tms record --covers myFeature --covers lib/FooModule t/manual/do-thing.md
+
 ```
 
 ## How it works
