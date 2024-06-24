@@ -9,6 +9,10 @@ use v5.14.0;    # Before 5.006, v5.10.0 would not be understood.
 use Getopt::Long qw{GetOptionsFromArray};
 use List::Util   qw{any};
 
+use FindBin::libs;
+
+use Git::TMS;
+
 sub help {
     my ($rc, %optmap) = $_;
     my $verbs = join('|', keys(%optmap));
@@ -22,24 +26,24 @@ sub main {
     my %optmap = (
         scan    => {
             positionals => [qw{shas}],
-            callback    => \&scan_results,
+            callback    => \&Git::TMS::scan_results,
             unreliable  => \$options{unreliable},
         },
         record  => {
             positionals => [qw{manual_test}],
-            callback    => \&record_results,
+            callback    => \&Git::TMS::record_results,
             'covers=s@' => \$options{covers},
             'os=s'      => \$options{os},
             'at=s'      => \$options{at},
         },
         export  => {
             positionals => [qw{shas database}],
-            callback    => \&export_results,
+            callback    => \&Git::TMS::export_results,
             append      => \$options{append},
         },
         results => {
             positionals => [qw{shas}],
-            callback    => \&show_results,
+            callback    => \&Git::TMS::show_results,
             coverage    => \$options{coverage},
             raw         => \$options{raw},
             os          => \$options{os},
@@ -68,22 +72,6 @@ sub main {
 }
 
 # Processors
-
-sub show_results {
-    my %options = @_;
-}
-
-sub export_results {
-    my %options = @_;
-}
-
-sub record_results {
-    my %options = @_;
-}
-
-sub scan_results {
-    my %options = @_;
-}
 
 exit main(@ARGV) unless caller;
 1;

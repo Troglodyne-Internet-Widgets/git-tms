@@ -12,7 +12,12 @@ Copy the hooks from hooks/ to the repo's .githooks folder.
 You can then commit and push them.
 They need to be tracked due to the particulars of your testsuite -- automated testing will necessarily be different for every project.
 As such the pre-commit hook will need some adjustment.
+
 Ideally you use some mechanism to only run relevant tests to the diff per commit in repositories with long-running/large testsuites.
+
+`git diff --name-only $primary_target...$current_target` fed into a routine which filters out extraneous files is one such mechanism.
+You can also look at coverage data from this to identify this list of relevant files.
+Supposing you set your CI systems to run the full testsuite (or use a pairwise approach) the coverage data ought to be reasonably up-to-date for these purposes.
 
 You then need to enforce that the users of the repository (or at least the CI systems) do this:
 
