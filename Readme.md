@@ -10,6 +10,9 @@ Knock-on benefit: Test results no longer lost when CI/Tracker/TMS changes/dies, 
 
 Copy the hooks from hooks/ to the repo's .githooks folder.
 You can then commit and push them.
+They need to be tracked due to the particulars of your testsuite -- automated testing will necessarily be different for every project.
+As such the pre-commit hook will need some adjustment.
+Ideally you use some mechanism to only run relevant tests to the diff per commit in repositories with long-running/large testsuites.
 
 You then need to enforce that the users of the repository (or at least the CI systems) do this:
 
@@ -49,7 +52,7 @@ We store these things per test result (and append if we detect different test/en
 
 To not pollute the normal stream of commit notes, we send this to a different ref:
 
-`refs/notes/test\_results`
+`refs/notes/test_results`
 
 Obviously, in a repository with a large amount of tests this will result in a LOT of notes.
 It is recommended that you set `notes.mergeStrategy` to `union` when using this.
@@ -72,3 +75,16 @@ This allows for simple parsing and multiple results for the same test on differi
 The schema ought to be as generic as possible to account for multi-programming language repositories.
 It is the responsibility of the individual parser modules for coverage & results to parse the data needed to fill export DBs.
 These modules ought live in a `Git::TMS::Parser::*` namespace as a child of `Git::TMS::Parser`.
+
+## The pre-commit hook
+
+Tests ought to be run by this and deposited into $TMPDIR/git-tms-result-stream.
+They will be cleaned up by the post-commit hook.
+
+## The post-commit hook
+
+This will append notes to the relevant ref.  Not much to it.
+
+## The post-push hook
+
+Pushes our relevant ref, as nobody properly configures what refs to push to, and besides that nobody wants a push to fail because our ref exploded for some reason.
