@@ -18,6 +18,8 @@ You then need to enforce that the users of the repository (or at least the CI sy
 
 `git config --local core.hooksPath .githooks/`
 
+Alternatively, you can integrate the hooks' techniques into some custom application in your workflow.
+
 You can then install the companion application Git::TMS from CPAN:
 
 `sudo cpan -i Git::TMS`
