@@ -6,7 +6,31 @@ Possible solution: Integrate test management into the tool they already use.
 
 Knock-on benefit: Test results no longer lost when CI systems go TU, CI can be simplified.
 
-## How
+## How to use
+
+Copy the hooks from hooks/ to the repo's .githooks folder.
+You can then commit and push them.
+
+You then need to enforce that the users of the repository (or at least the CI systems) do this:
+
+`git config --local core.hooksPath .githooks/`
+
+You can then install the companion application Git::TMS from CPAN:
+
+`sudo cpan -i Git::TMS`
+
+Which will expose the program `git-tms`, which will allow you to do such useful things as:
+
+```
+# Export the test results for a given period to sqlite, appending data if the db exists.  See schema/ for db design.
+git tms export --append 0abcdef..HEAD results.sqlite3
+
+# Show results & coverage & output for a sha on windows
+git tms results --coverage --raw --os windows HEAD
+
+```
+
+## How it works
 
 Abuse of git-notes to store test results per sha so you can have them run as a pre-commit hook and note the results as a post-commit hook.
 
@@ -36,3 +60,9 @@ We divide the sections above with the following markers:
 3. End-Test-Result-For: $TEST\_NAME
 
 This allows for simple parsing and multiple results for the same test on differing platforms to be represented.
+
+## Schema
+
+The schema ought to be as generic as possible to account for multi-programming language repositories.
+It is the responsibility of the individual parser modules for coverage & results to parse the data needed to fill export DBs.
+These modules ought live in a `Git::TMS::Parser::*` namespace as a child of `Git::TMS::Parser`.
