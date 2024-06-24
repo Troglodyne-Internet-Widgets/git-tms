@@ -30,7 +30,7 @@ sub main {
             unreliable  => \$options{unreliable},
         },
         record  => {
-            positionals => [qw{manual_test}],
+            positionals => [qw{test_name}],
             callback    => \&Git::TMS::record_results,
             'covers=s@' => \$options{covers},
             'os=s'      => \$options{os},
