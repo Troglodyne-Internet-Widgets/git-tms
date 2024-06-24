@@ -4,7 +4,7 @@ Problem: Developers flat-out refuse to use test management systems, so tracking 
 
 Possible solution: Integrate test management into the tool they already use.
 
-Knock-on benefit: Test results no longer lost when CI systems go TU, CI can be simplified.
+Knock-on benefit: Test results no longer lost when CI/Tracker/TMS changes/dies, testing stack can be simplified.
 
 ## How to use
 
