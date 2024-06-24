@@ -32,7 +32,7 @@ git tms results --coverage --raw --os windows HEAD
 git tms scan --unreliable 0abcdef..HEAD
 
 # Record the results of a manual test, optionally tagging covered code (or if it does not exist, more nebulous things like concepts)
-git tms record --covers myFeature --covers lib/FooModule t/manual/do-thing.md
+git tms record --covers myFeature --covers lib/FooModule --at HEAD t/manual/do-thing.md
 
 ```
 
