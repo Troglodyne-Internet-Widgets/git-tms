@@ -1,0 +1,20 @@
+*.swp
+*.swo
+*.swn
+
+# Build leavings
+MYMETA.json
+MYMETA.yml
+Makefile
+pm_to_blib
+blib/
+cover_db/
+.build
+# At the root, where dzil build leaves them.  Unanchored, the pattern also
+# hides a test named after the distribution, such as t/Git-TMS-Foo.t.
+/Git-TMS-*
+
+# Claude Code makes a worktree here for each agent that it isolates.  They are
+# not part of the distribution, and [Git::Check] refuses a release while they
+# are untracked.
+.claude/worktrees/
