@@ -42,7 +42,7 @@ sub new {
 # Run git, and return what it printed.  It dies when git exits with a status
 # other than 0.  A first argument that is a reference to a scalar is the
 # standard input of git, as for call.
-# @param   args  Str  the arguments of git, one to each element
+# @param   @args  Str  the arguments of git, one to each element
 # @returns Str  what git printed on its standard output
 # @throws  a message that names the git command and gives what git printed on its standard error
 # @example my $tree = $git->run(qw{rev-parse HEAD^{tree}});
@@ -60,7 +60,7 @@ sub run {
 
 # Run git, and return its exit status with what it printed.  A first argument
 # that is a reference to a scalar is the standard input of git.
-# @param   args  Str  the arguments of git, one to each element
+# @param   @args  Str  the arguments of git, one to each element
 # @returns List  the exit status of git (0 for success, -1 when a signal killed it), its standard output and its standard error
 # @throws  the message of IPC::Run3 when git cannot be started at all
 # @example my ( $exit, $out, $err ) = $git->call( \"line\n", qw{notes add -F -}, $tree );
@@ -96,7 +96,7 @@ sub ensure_identity {
 
 # Read one value of the git configuration.
 # @param   key  Str  the name of the value, such as tms.remote
-# @returns Maybe[Str]  the value without its line end, or undef when it is not set
+# @returns Str|Undef  the value without its line end, or undef when it is not set
 # @example my $remote = $git->config('tms.remote') // 'origin';
 sub config {
     my ( $self, $key ) = @_;

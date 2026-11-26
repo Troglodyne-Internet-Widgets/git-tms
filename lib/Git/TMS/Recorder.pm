@@ -42,12 +42,12 @@ Readonly my %STATUS     => map { $_ => 1 } qw{pass fail skip bailout};
 =head1 DESCRIPTION
 
 The harness plugins of git-tms, L<App::Prove::Plugin::GitTMS> and
-L<App::Yath::Plugin::GitTMS>, share this class.  A plugin calls L</add> once
-for each test file that ran, and L</finish> once at the end of the run.  Only
-L</finish> writes to git, so a run that dies half way writes nothing, and a
+L<App::Yath::Plugin::GitTMS>, share this class.  A plugin calls C<add> once
+for each test file that ran, and C<finish> once at the end of the run.  Only
+C<finish> writes to git, so a run that dies half way writes nothing, and a
 test file never waits for git.
 
-The recorder takes the tested tree from L<Git::TMS::Store/tested_tree> when it
+The recorder takes the tested tree from C<tested_tree> of L<Git::TMS::Store> when it
 is made, before the tests can change a file.  If no tree id describes the work
 tree, it warns once, and then records nothing.
 
@@ -127,7 +127,7 @@ sub run_id {
 }
 
 # The tested tree, or undef when this run records nothing.
-# @returns Maybe[Str]  the tree id
+# @returns Str|Undef  the tree id
 # @example print $recorder->tree // 'nothing', "\n";
 sub tree {
     my ($self) = @_;
@@ -168,7 +168,7 @@ sub test_path {
 # @param   reason   Str  why the file was skipped
 # @param   output   Str  the output of the assertions that failed, as characters
 # @param   try      Int  which retry of the file this was, from 1.  Absent for the first run.
-# @returns Maybe[HashRef]  the record, or undef when this run records nothing
+# @returns HashRef|Undef  the record, or undef when this run records nothing
 # @throws  when the status is not one of the four
 # @example $recorder->add( test => 't/a.t', status => 'pass', elapsed => 0.12 );
 sub add {

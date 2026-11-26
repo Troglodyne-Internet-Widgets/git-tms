@@ -130,7 +130,7 @@ sub tested_tree {
 # keeps the records it had, and gains each new one that it lacks.
 # @param   config   Str  the name of the configuration
 # @param   tree     Str  the id of the tested tree
-# @param   records  HashRef  the records, each one a hash that becomes one line of JSON
+# @param   @records  HashRef  the records, each one a hash that becomes one line of JSON
 # @returns Int  the number of lines in the note afterwards
 # @throws  as check_name does, or when git cannot write the note
 # @example $store->add_records( 'linux-perl5.40', $tree, @records );

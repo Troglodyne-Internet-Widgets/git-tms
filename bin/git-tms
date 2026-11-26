@@ -1,77 +1,41 @@
-#!/usr/bin/env perl
+#!perl
+
+# PODNAME: git-tms
+# ABSTRACT: Read, push and fetch the test results that git notes keep
+
+use 5.014;
 
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 
-use 5.006;
-use v5.14.0;    # Before 5.006, v5.10.0 would not be understood.
+use Git::TMS::CLI ();
 
-use Getopt::Long qw{GetOptionsFromArray};
-use List::Util   qw{any};
+exit Git::TMS::CLI::main(@ARGV);
 
-use FindBin::libs;
+__END__
 
-use Git::TMS;
+=head1 SYNOPSIS
 
-sub help {
-    my ($rc, %optmap) = $_;
-    my $verbs = join('|', keys(%optmap));
-    print "USAGE:\n    git tms [$verbs] ...";
-}
+    git tms results [--config NAME]... [--raw] [REVISION | RANGE]
+    git tms scan --where-fails TEST [REVISION]
+    git tms push [REMOTE]
+    git tms fetch [REMOTE]
+    git tms help
 
-sub main {
-    my @args = @_;
+=head1 DESCRIPTION
 
-    my %options;
-    my %optmap = (
-        scan    => {
-            positionals => [qw{shas}],
-            callback    => \&Git::TMS::scan_results,
-            unreliable  => \$options{unreliable},
-        },
-        record  => {
-            positionals => [qw{test_name}],
-            callback    => \&Git::TMS::record_results,
-            'covers=s@' => \$options{covers},
-            'os=s'      => \$options{os},
-            'at=s'      => \$options{at},
-        },
-        export  => {
-            positionals => [qw{shas database}],
-            callback    => \&Git::TMS::export_results,
-            append      => \$options{append},
-        },
-        results => {
-            positionals => [qw{shas}],
-            callback    => \&Git::TMS::show_results,
-            coverage    => \$options{coverage},
-            raw         => \$options{raw},
-            os          => \$options{os},
-        },
-    );
+The harness plugins of L<Git::TMS> write the outcome of each test file to the
+notes of the tested tree, one notes ref for each configuration.  This program
+reads those notes, and moves them between repositories.  Git runs it for
+C<git tms>, because it is called F<git-tms> and is on the C<PATH>.
 
-    my $command = shift(@args);
+C<git tms help> prints each command and what it does.  L<Git::TMS::CLI> has
+the same text.
 
-    return help(1, %optmap) unless any { $command eq $_ } keys(%optmap);
+=head1 SEE ALSO
 
-    my $positionals = delete $optmap{$command}{positionals};
-    my %dispatch;
-    foreach my $command (keys(%optmap)) {
-        $dispatch{$command} = delete $optmap{$command}{callback};
-    }
+L<Git::TMS>
 
-    GetOptionsFromArray(\@args,
-        %{$optmap{$command}}
-    );
+L<Git::TMS::CLI>
 
-    foreach my $positional (@$positionals) {
-        $options{$positional} = shift(@args);
-    }
-
-    $dispatch{$command}->(%options);
-}
-
-# Processors
-
-exit main(@ARGV) unless caller;
-1;
+=cut

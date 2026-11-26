@@ -20,9 +20,6 @@ use Time::HiRes        ();
 
 =head1 SYNOPSIS
 
-    prove -l -PGitTMS=config=linux-perl5.40 t
-
-    # Or by hand:
     use Git::TMS::Harness;
     Git::TMS::Harness->configure( config => 'linux-perl5.40' );
     my $harness = Git::TMS::Harness->new( { lib => ['lib'], merge => 1 } );
@@ -30,13 +27,14 @@ use Time::HiRes        ();
 
 =head1 DESCRIPTION
 
-L<App::Prove::Plugin::GitTMS> makes prove use this harness.  It watches the
+L<App::Prove::Plugin::GitTMS> makes prove use this harness, for C<prove
+-PGitTMS>.  It watches the
 TAP of each test file, and gives the outcome of each file to a
 L<Git::TMS::Recorder> when the file ends.  When all the files ran, or one
 bailed out, the recorder writes the records to the notes of the tested tree.
 
 The harness keeps no TAP of a test that passed.  For a test that did not pass,
-it keeps the output that L</abnormal_output> chooses.  Diagnostics go to
+it keeps the output that C<abnormal_output> chooses.  Diagnostics go to
 standard error, so the harness sees them only when C<merge> is on, as with
 C<prove -m>.  The prove plugin turns it on.
 
@@ -47,7 +45,7 @@ my %settings;
 # Set the arguments of the recorder that each new harness makes.  The prove
 # plugin calls it, because App::Prove gives a harness class only the arguments
 # that TAP::Harness knows.
-# @param   config  Str  the name of the configuration
+# @param   %args  Str  the arguments of Git::TMS::Recorder->new, such as config, the name of the configuration
 # @returns Undef
 # @example Git::TMS::Harness->configure( config => 'linux-perl5.40' );
 sub configure {
@@ -57,7 +55,7 @@ sub configure {
 }
 
 # Make the harness, with the callbacks that record each test file.
-# @param   args  HashRef  the arguments of TAP::Harness
+# @param   @args  HashRef  the arguments of TAP::Harness, in one hash
 # @returns Git::TMS::Harness  the harness
 # @throws  as Git::TMS::Recorder->new does
 # @example my $harness = Git::TMS::Harness->new( { merge => 1 } );
@@ -84,7 +82,7 @@ sub recorder {
 }
 
 # Run the tests, and then write their records, also after a bail out.
-# @param   tests  Str  the test files, as TAP::Harness takes them
+# @param   @tests  Str  the test files, as TAP::Harness takes them
 # @returns TAP::Parser::Aggregator  the result of the run
 # @throws  what TAP::Harness throws, such as the message of a bail out, after the records are written
 # @example my $aggregate = $harness->runtests('t/a.t');
@@ -122,7 +120,7 @@ sub watch {
 # The after_test callback: give the outcome of a test file to the recorder.
 # @param   job     ArrayRef  the file and its description, as TAP::Harness passes them
 # @param   parser  TAP::Parser  the parser of the file
-# @returns Maybe[HashRef]  the record, or undef when this run records nothing
+# @returns HashRef|Undef  the record, or undef when this run records nothing
 # @example $harness->record( [ 't/a.t', 't/a.t' ], $parser );
 sub record {
     my ( $self, $job, $parser ) = @_;
@@ -151,7 +149,7 @@ sub record {
 # and was not a TODO, the comments after it up to the next assertion, each
 # bail out, and each line that is not TAP at all, such as the message of a
 # die.  The assertions of a subtest are indented, and count the same way.
-# @param   lines  Str  the lines of TAP of one test file, as bytes
+# @param   @lines  Str  the lines of TAP of one test file, as bytes
 # @returns Str  the chosen lines, decoded from UTF-8, each with a line end
 # @example my $output = Git::TMS::Harness::abnormal_output(@lines);
 sub abnormal_output {

@@ -166,6 +166,7 @@ perl
 perlcritic
 perltidy
 PGitTMS
+pGitTMS
 PKI
 plaintext
 POSIX

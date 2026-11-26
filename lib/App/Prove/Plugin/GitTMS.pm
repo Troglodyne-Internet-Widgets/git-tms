@@ -17,13 +17,13 @@ use Git::TMS::Harness ();
 
 Readonly my %KNOWN => map { $_ => 1 } qw{config merge};
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
+
+Run prove with the plugin:
 
     prove -l -PGitTMS t
     prove -l -PGitTMS=config=linux-perl5.40 t
     prove -l -PGitTMS=config=linux-perl5.40,merge=0 t
-
-=head1 DESCRIPTION
 
 The plugin makes prove run its tests through L<Git::TMS::Harness>.  When the
 run ends, the record of each test file is in the note of the tested tree, in

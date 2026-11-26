@@ -19,12 +19,12 @@ use Git::TMS::Recorder ();
 
 Readonly my %KNOWN => map { $_ => 1 } qw{config};
 
-=head1 SYNOPSIS
+=head1 DESCRIPTION
+
+Run yath with the plugin:
 
     yath test -pGitTMS t
     yath test -pGitTMS=config=linux-perl5.40 t
-
-=head1 DESCRIPTION
 
 The plugin reads the events of a yath run.  When a test file ends, it gives
 the outcome of the file to a L<Git::TMS::Recorder>.  When the run ends, the
@@ -46,7 +46,7 @@ them.
 =cut
 
 # Called by yath for -pGitTMS, with the arguments after the =.
-# @param   args  Str  the arguments, each as name=value
+# @param   @args  Str  the arguments, each as name=value
 # @returns App::Yath::Plugin::GitTMS  the plugin
 # @throws  a message that names an argument that the plugin does not know
 # @example my $plugin = App::Yath::Plugin::GitTMS->new('config=linux-perl5.40');
@@ -73,12 +73,11 @@ sub recorder {
 
 # Called by yath for each event.  It keeps what a record needs, and adds the
 # record when the job ends.
-# @param   event     Test2::Harness::Event  the event
-# @param   settings  Test2::Harness::Settings  the settings of yath, which it does not read
-# @returns Maybe[HashRef]  the record when the event ends a job, else undef
+# @param   event  Test2::Harness::Event  the event.  The settings of yath come after it, and the plugin does not read them.
+# @returns HashRef|Undef  the record when the event ends a job, else undef
 # @example $plugin->handle_event( $event, $settings );
 sub handle_event {
-    my ( $self, $event, $settings ) = @_;
+    my ( $self, $event ) = @_;
 
     my $f       = $event->facet_data // return;
     my $harness = $f->{harness}      // return;
@@ -145,15 +144,15 @@ sub is_failure {
 }
 
 # The lines of the diagnostics in a list of info facets, each behind a #.
-# @param   infos   ArrayRef[HashRef]  the info facets
+# @param   facets  ArrayRef[HashRef]  the info facets
 # @param   indent  Str  what goes in front of each line
 # @returns List[Str]  the lines
 # @example my @lines = App::Yath::Plugin::GitTMS::diagnostic_lines( $f->{info}, q{} );
 sub diagnostic_lines {
-    my ( $infos, $indent ) = @_;
+    my ( $facets, $indent ) = @_;
 
     my @lines;
-    foreach my $info ( @{ $infos // [] } ) {
+    foreach my $info ( @{ $facets // [] } ) {
         push @lines, map { "$indent# $_" } split m/\n/sx, $info->{details} // q{};
     }
     return @lines;
@@ -162,7 +161,7 @@ sub diagnostic_lines {
 # The lines that describe a failed assertion: the assertion, its diagnostics,
 # and, for a subtest, each failure inside it with its diagnostics, indented by
 # the depth of the subtest.
-# @param   f  HashRef  the facet data of the assertion
+# @param   top  HashRef  the facet data of the assertion
 # @returns List[Str]  the lines
 # @example my @lines = App::Yath::Plugin::GitTMS::failure_lines($f);
 sub failure_lines {
@@ -200,7 +199,7 @@ sub failure_lines {
 # @param   job  HashRef  what the plugin kept about the job
 # @param   end  HashRef  the harness_job_end facet
 # @param   try  Int  the try of the job, from 0
-# @returns Maybe[HashRef]  the record, or undef when this run records nothing
+# @returns HashRef|Undef  the record, or undef when this run records nothing
 # @example $plugin->add_job( $job, $end, 0 );
 sub add_job {
     my ( $self, $job, $end, $try ) = @_;
