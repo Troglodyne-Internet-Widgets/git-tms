@@ -32,6 +32,8 @@ backends
 BackPAN
 backtick
 basename
+Baugh
+Bool
 bugtracker
 checksummed
 checksumming
@@ -94,6 +96,7 @@ FQDN
 GiB
 GraphQL
 greppable
+gzipped
 hardcode
 hardcoded
 hardcodes
@@ -116,6 +119,7 @@ LDAP
 LDAPS
 LDIF
 lifecycle
+LLC
 lookups
 loopback
 lowercased
@@ -125,6 +129,7 @@ LTS
 MACs
 makefile
 makefiles
+maxOutput
 memoize
 memoized
 memoizes
@@ -145,8 +150,10 @@ namespace
 NIC
 NONINFRINGEMENT
 NTP
+Num
 OAuth
 OOM
+outputFilter
 overcommit
 overcommits
 overcommitted
@@ -155,8 +162,10 @@ passwordless
 PCI
 PCIe
 PEM
+perl
 perlcritic
 perltidy
+PGitTMS
 PKI
 plaintext
 POSIX
@@ -165,6 +174,7 @@ preflight
 proxied
 proxying
 readdir
+rebase
 recurse
 recursed
 recurses
@@ -191,6 +201,7 @@ sshd
 SSL
 stdin
 stdout
+Str
 Subclasses
 subdir
 subdirectory
@@ -214,8 +225,10 @@ timestamp
 TLD
 TLDs
 TLS
+tms
 TODO
 toolchain
+Troglodyne
 TXT
 udev
 UDP
@@ -232,8 +245,10 @@ unlink
 unlinked
 unlinking
 unlinks
+Untracked
 URI
 URIs
+UTF
 UUID
 validator
 vhost
@@ -245,3 +260,5 @@ VPNs
 WAL
 whitespace
 YAML
+yath
+zlib
